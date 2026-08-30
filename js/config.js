@@ -99,9 +99,10 @@ const CONFIG = {
               "Y hay algo que casi nunca digo. Llevo años tratando de demostrar que valgo la pena, " +
               "porque casi siempre me han puesto por debajo. Por eso vivo metido en mis proyectos " +
               "como si se me fuera la vida en eso.\n\n" +
-              "Sé que nos ha quitado tiempo y sé que lo has sentido. No es que no quiera estar; es " +
-              "que ando peleando esa pelea. Y aun así, lo que hiciste por mí no se me ha olvidado " +
-              "ni un solo día.",
+              "Sé que eso nos ha quitado tiempo y sé que lo has sentido. No te lo voy a maquillar: " +
+              "ahorita tengo la cabeza puesta ahí y no me da para mucho más. Que ande metido en lo " +
+              "mío no le quita nada a lo que hiciste por mí, pero tampoco te quiero prometer algo " +
+              "que hoy no puedo sostener.",
       petalo: "onda", petalos: 13, altura: 1.62,
       claro: "#F6C56A", hondo: "#C9791F", centro: "#4A2E13",
       adorno: "gotas"
@@ -132,7 +133,7 @@ const CONFIG = {
               "tendiéndole la mano a todo el mundo y eso no lo hace cualquiera.\n\n" +
               "Y sobre nosotros: si quieres espacio, lo entiendo, de pronto no soy lo que estás " +
               "buscando. Y si quieres que sigamos hablando despacio, sin afán, sabiendo lo que soy " +
-              "y lo que puedo dar, aquí voy a estar.\n\n" +
+              "y lo que te puedo dar, por mí seguimos.\n\n" +
               "La ventana la dejo entreabierta, y siempre desde el respeto y la admiración.",
       petalo: "corazon", petalos: 12, altura: 1.95,
       claro: "#FFC24D", hondo: "#D4661C", centro: "#4A2A12",
