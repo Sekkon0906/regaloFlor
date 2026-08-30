@@ -5,7 +5,7 @@
 
 const CONFIG = {
 
-  nombre: "Jessica",
+  nombre: "Jess",
 
   /* El número al que llegan los mensajes (país + número, sin el +).
      Lo usan tanto la pantalla del regalo como el girasol en blanco. */
