@@ -506,21 +506,40 @@ button { font: inherit; color: inherit; cursor: pointer; border: 0; background: 
 .hito__texto { margin: 0 0 0.4rem; font-size: 0.9rem; line-height: 1.55; color: var(--tinta-suave); }
 .hito__texto:last-child { margin-bottom: 0; }
 
-.lista-datos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
-.dato {
-  position: relative;
-  padding: 0.7rem 0.9rem 0.7rem 2.5rem;
-  font-size: 1rem;
+/* los datos del regalo: ella los llena y se van por WhatsApp */
+.formulario { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.campo { display: flex; flex-direction: column; gap: 0.24rem; }
+.campo__nombre {
+  font-size: 0.74rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--tierra);
+}
+.campo__caja {
+  width: 100%;
+  padding: 0.72rem 0.9rem;
+  font: inherit; font-size: 1rem;
+  color: var(--tinta);
   background: #FFFCF3;
   border: 1px solid var(--crema-honda);
   border-radius: 12px;
+  transition: border-color 0.18s, box-shadow 0.18s;
 }
-.dato::before {
-  content: ""; position: absolute; left: 0.95rem; top: 50%;
-  width: 12px; height: 12px;
-  transform: translateY(-50%) rotate(45deg);
-  background: var(--sol); border: 1.5px solid var(--petalo-hondo); border-radius: 3px;
+.campo__caja::placeholder { color: #AE9B84; }
+.campo__caja:focus-visible {
+  outline: none;
+  border-color: var(--petalo);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.28);
 }
+
+.enlace {
+  padding: 0.4rem 0.2rem;
+  font-size: 0.84rem; font-weight: 500;
+  color: var(--tinta-suave);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.enlace:hover { color: var(--tinta); }
 
 .campo-texto { display: block; }
 .campo-texto textarea {

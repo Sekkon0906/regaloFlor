@@ -37,8 +37,9 @@ tocar. Donde escribas `{nombre}` se pone solo el nombre de la persona.
 | Los pasos de la guía | `guia` |
 | **Los girasoles y sus recuerdos** | `girasoles` |
 | La felicitación al ganar | `victoria` |
-| El cierre y los datos que pides | `final` |
-| El girasol en blanco y **el número de WhatsApp** | `blanco` |
+| El cierre y los campos que ella llena | `final` |
+| El girasol en blanco | `blanco` |
+| **El número de WhatsApp** | `whatsapp`, arriba del todo |
 
 ### Los girasoles
 
@@ -65,11 +66,20 @@ Para tener cuatro girasoles en vez de cinco, borra uno del arreglo y ajusta los
 
 ### El número de WhatsApp
 
-Está en `blanco.numero`, con el indicativo del país y sin el `+`:
+Está arriba del todo en `config.js`, con el indicativo del país y sin el `+`.
+Lo usan las dos pantallas que mandan mensajes:
 
 ```js
-numero: "573160480641"
+whatsapp: "573160480641"
 ```
+
+### Los datos del regalo
+
+En la penúltima pantalla ella llena cuatro campos y el botón abre WhatsApp con
+el mensaje ya escrito. Los campos se configuran en `final.campos`: `llave` es
+el rótulo que ella ve, `enMensaje` es cómo sale en el WhatsApp (por eso uno
+dice «Algo que te guste comer» y el otro «Algo que me gusta comer»), y
+`marcador` es el texto gris de ejemplo.
 
 ## Un solo archivo
 
@@ -115,6 +125,7 @@ js/juego.js             el hilo: escenas, arrastrar y soltar, comprobar el orden
   quitan el viento, el vaivén de la cámara y las animaciones.
 - Si el navegador no puede con WebGL, la página lo dice claro en vez de quedarse
   en blanco.
-- La página no recoge ni envía ningún dato a ningún servidor. La lista del
-  regalo es texto para copiar, y el girasol en blanco arma un mensaje de
-  WhatsApp que la persona envía desde su propio teléfono.
+- La página no recoge ni envía ningún dato a ningún servidor, ni guarda los
+  datos del regalo en el teléfono. Lo que ella escribe se convierte en un
+  mensaje de WhatsApp que sale desde su propio teléfono, y ella decide si lo
+  manda o no.

@@ -5,7 +5,11 @@
 
 const CONFIG = {
 
-  nombre: "Jess",
+  nombre: "Jessica",
+
+  /* El número al que llegan los mensajes (país + número, sin el +).
+     Lo usan tanto la pantalla del regalo como el girasol en blanco. */
+  whatsapp: "573160480641",
 
   /* ---- 1. La pantalla de los globos ------------------------------------ */
   bienvenida: {
@@ -149,21 +153,34 @@ const CONFIG = {
     boton:    "Y ahora sí, tu regalo"
   },
 
-  /* ---- 7. El regalo ------------------------------------------------------ */
+  /* ---- 7. El regalo -----------------------------------------------------
+     Ella llena los campos y el botón abre WhatsApp con todo escrito.
+     Nada de esto se guarda ni se manda a ningún servidor.                */
   final: {
     etiqueta: "una última cosa",
     titulo:   "Espero que te haya gustado esta pequeña dinámica",
-    texto:    "Tu regalo ya está listo, solo me falta poder mandártelo. Para eso necesito que me escribas con estos datos:",
-    datos: [
-      "Tu nombre completo",
-      "El número de cuenta o la llave a la que te puedo transferir",
-      "La dirección donde te llega todo bien",
-      "Algo que te guste comer"
+    texto:    "Tu regalo ya está listo, solo me falta poder mandártelo. Llena esto y con un toque me llega todo:",
+    /* `llave` es el rótulo del formulario (le habla a ella);
+       `enMensaje` es como sale en el WhatsApp (lo escribe ella).      */
+    campos: [
+      { llave: "Nombre completo",          enMensaje: "Nombre completo",
+        marcador: "Como aparece en tu cédula" },
+      { llave: "Número de cuenta o llave", enMensaje: "Cuenta o llave",
+        marcador: "Nequi, Bancolombia, lo que uses" },
+      { llave: "Dirección",                enMensaje: "Dirección",
+        marcador: "Donde te llega todo bien" },
+      { llave: "Algo que te guste comer",  enMensaje: "Algo que me gusta comer",
+        marcador: "Lo que sea, yo anoto" }
     ],
-    nota:   "Me lo mandas por donde siempre hablamos y yo me encargo del resto.",
-    boton:  "Copiar la lista",
-    copiado:"Listo, copiado. Solo pégalo y mándamelo.",
-    seguir: "Falta un girasol"
+    saludo:   "¡Ya organicé los girasoles! Estos son mis datos:",
+    falta:    "Te falta llenar: {campos}.",
+    listo:    "Ya está todo. Dale al botón y se abre WhatsApp con el mensaje escrito.",
+    whatsapp: "Enviármelo por WhatsApp",
+    ayuda:    "Al tocar el botón se abre WhatsApp con todo ya escrito. Solo le das enviar.",
+    copiar:   "o copiar el texto",
+    copiado:  "Copiado. Pégamelo por donde quieras.",
+    enviado:  "Se abrió WhatsApp con todo listo. Solo dale enviar.",
+    seguir:   "Falta un girasol"
   },
 
   /* ---- 8. El girasol en blanco (opcional) --------------------------------
@@ -176,7 +193,6 @@ const CONFIG = {
                  "escríbelo aquí. Lo voy a leer, te lo prometo.",
     marcador:    "Escribe aquí lo que quieras…",
     whatsapp:    "Mandármelo por WhatsApp",
-    numero:      "573160480641",
     copiar:      "O copiar el texto",
     copiado:     "Copiado. Pégamelo por donde quieras.",
     vacio:       "Escribe algo primero y el botón se activa.",

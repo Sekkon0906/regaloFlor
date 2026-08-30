@@ -459,12 +459,58 @@
     $("#fin-etiqueta").textContent = texto(CONFIG.final.etiqueta);
     $("#fin-titulo").textContent = texto(CONFIG.final.titulo);
     $("#fin-texto").textContent = texto(CONFIG.final.texto);
-    $("#fin-nota").textContent = texto(CONFIG.final.nota);
-    $("#btn-copiar").textContent = texto(CONFIG.final.boton);
+    $("#fin-nota").textContent = texto(CONFIG.final.ayuda);
+    $("#btn-enviar").textContent = texto(CONFIG.final.whatsapp);
+    $("#btn-copiar").textContent = texto(CONFIG.final.copiar);
     $("#btn-seguir").textContent = texto(CONFIG.final.seguir);
-    $("#lista-datos").innerHTML = CONFIG.final.datos
-      .map((d) => `<li class="dato">${texto(d)}</li>`).join("");
+
+    if (!$("#fin-campos").children.length) {
+      $("#fin-campos").innerHTML = CONFIG.final.campos.map((c, i) => `
+        <label class="campo">
+          <span class="campo__nombre">${texto(c.llave)}</span>
+          <input class="campo__caja" type="text" id="dato-${i}"
+                 autocomplete="off" placeholder="${texto(c.marcador)}">
+        </label>`).join("");
+      $("#fin-campos").addEventListener("input", revisarFinal);
+    }
+    revisarFinal();
     Fiesta.confeti(70);
+  }
+
+  /* qué escribió y qué le falta */
+  function datosDelRegalo() {
+    return CONFIG.final.campos.map((c, i) => ({
+      llave: texto(c.llave),
+      enMensaje: texto(c.enMensaje || c.llave),
+      valor: ($(`#dato-${i}`) || { value: "" }).value.trim()
+    }));
+  }
+
+  function revisarFinal() {
+    const datos = datosDelRegalo();
+    const faltan = datos.filter((d) => !d.valor);
+    $("#btn-enviar").disabled = faltan.length > 0;
+    $("#btn-copiar").hidden = faltan.length > 0;
+    $("#fin-estado").textContent = faltan.length === 0
+      ? texto(CONFIG.final.listo)
+      : texto(CONFIG.final.falta).replace("{campos}",
+          faltan.map((d) => d.llave.toLowerCase()).join(", "));
+  }
+
+  function mensajeDelRegalo() {
+    const cuerpo = datosDelRegalo().map((d) => `${d.enMensaje}: ${d.valor}`).join("\n");
+    return `${texto(CONFIG.final.saludo)}\n\n${cuerpo}`;
+  }
+
+  function enviarRegalo() {
+    if ($("#btn-enviar").disabled) return;
+    abrirWhatsApp(mensajeDelRegalo());
+    $("#fin-estado").textContent = texto(CONFIG.final.enviado);
+  }
+
+  function abrirWhatsApp(mensaje) {
+    window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(mensaje)}`,
+                "_blank", "noopener");
   }
 
   async function copiar(cadena, dondeAvisar, mensaje) {
@@ -514,8 +560,7 @@
   function mandarPorWhatsApp() {
     const t = $("#bl-area").value.trim();
     if (!t) return;
-    const url = `https://wa.me/${CONFIG.blanco.numero}?text=${encodeURIComponent(t)}`;
-    window.open(url, "_blank", "noopener");
+    abrirWhatsApp(t);
     $("#bl-estado").textContent = texto(CONFIG.blanco.despedida);
   }
 
@@ -542,10 +587,9 @@
     $("#btn-seguir").addEventListener("click", () => { irA("blanco"); montarBlanco(); });
     $("#bl-saltar").addEventListener("click", () => { irA("final"); });
 
-    $("#btn-copiar").addEventListener("click", () => {
-      const cuerpo = CONFIG.final.datos.map((d, i) => `${i + 1}. ${texto(d)}`).join("\n");
-      copiar(`${texto(CONFIG.final.texto)}\n\n${cuerpo}`, "#fin-copiado", CONFIG.final.copiado);
-    });
+    $("#btn-enviar").addEventListener("click", enviarRegalo);
+    $("#btn-copiar").addEventListener("click", () =>
+      copiar(mensajeDelRegalo(), "#fin-estado", CONFIG.final.copiado));
 
     $("#bl-area").addEventListener("input", () => {
       revisarBlanco();

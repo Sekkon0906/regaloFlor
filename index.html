@@ -109,15 +109,16 @@
       <p class="etiqueta" id="fin-etiqueta"></p>
       <h2 class="titular titular--medio" id="fin-titulo"></h2>
       <p class="texto-guion" id="fin-texto"></p>
-      <ul class="lista-datos" id="lista-datos"></ul>
+      <div class="formulario" id="fin-campos"></div>
       <p class="nota" id="fin-nota"></p>
-      <div class="hoja-texto__pie">
-        <span class="cuenta" id="fin-copiado" role="status" aria-live="polite"></span>
+      <div class="hoja-texto__pie hoja-texto__pie--columna">
+        <span class="cuenta" id="fin-estado" role="status" aria-live="polite"></span>
         <div class="pie-botones">
-          <button class="boton boton--suave" id="btn-copiar" type="button"></button>
-          <button class="boton" id="btn-seguir" type="button"></button>
+          <button class="enlace" id="btn-copiar" type="button"></button>
+          <button class="boton boton--wa" id="btn-enviar" type="button" disabled></button>
         </div>
       </div>
+      <button class="pista" id="btn-seguir" type="button"></button>
     </div>
   </section>
 
