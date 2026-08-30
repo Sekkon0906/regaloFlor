@@ -15,7 +15,12 @@ html = html.replace(
   `<style>\n${leer("css/estilos.css")}\n</style>`
 );
 
-for (const archivo of ["js/config.js", "js/escena.js", "js/celebracion.js", "js/juego.js"]) {
+const guiones = [
+  "js/vendor/three.min.js", "js/config.js", "js/girasol3d.js",
+  "js/campo3d.js", "js/celebracion.js", "js/guia.js", "js/juego.js"
+];
+
+for (const archivo of guiones) {
   html = html.replace(
     new RegExp(`<script src="${archivo}"></script>`),
     `<script>\n${leer(archivo)}\n</script>`

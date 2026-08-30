@@ -1,107 +1,146 @@
 /* ==========================================================================
-   CONFIGURACIÓN
-   Este es el ÚNICO archivo que necesitas tocar para personalizar el regalo.
-   Todo lo que está aquí es texto de ejemplo: reemplázalo por lo real.
-   Donde escribas {nombre} se pondrá solo el nombre de abajo.
+   CONFIGURACIÓN — el único archivo que necesitas tocar.
+   Donde escribas {nombre} se pone solo el nombre de abajo.
    ========================================================================== */
 
 const CONFIG = {
 
-  /* ---- 1. Quién ------------------------------------------------------- */
-  nombre: "Flor",
+  nombre: "Jess",
 
-  /* ---- 2. Pantalla de bienvenida (la de los globos) -------------------- */
+  /* ---- 1. La pantalla de los globos ------------------------------------ */
   bienvenida: {
     etiqueta:  "29 de agosto",
     titulo:    "Feliz cumpleaños, {nombre}",
-    subtitulo: "Antes del regalo hay una cosita que quiero que hagas.",
-    pista:     "clic para continuar"
+    subtitulo: "Espero que te la pases muy bien hoy. Antes del regalo hay una cosita.",
+    pista:     "toca la pantalla para seguir"
   },
 
-  /* ---- 3. Los textos que van pasando con cada clic ---------------------
-     Agrega o quita párrafos libremente: uno por cada clic.               */
+  /* ---- 2. Los textos que pasan con cada toque -------------------------- */
   intro: [
-    "Me acordé de que un día me dijiste que los girasoles eran tus flores favoritas, así que te sembré un campo entero.",
-    "Son cinco girasoles y cada uno se quedó con un recuerdo nuestro adentro.",
-    "El problema es que crecieron desordenados. Tienes que sembrarlos en las macetas en el orden en que pasaron las cosas: primero el recuerdo más viejo, al final el más reciente.",
-    "Cuando el sol le pega a un girasol, la sombra que proyecta te cuenta su recuerdo. Léelos con calma, que ahí están las pistas.",
-    "Ya. Al campo."
+    "Hola, {nombre}. Feliz cumpleaños. En serio, espero que hoy te traten como te mereces.",
+    "Te armé esto porque me dijiste que los girasoles eran tus flores favoritas. Son cinco y cada uno se quedó con un recuerdo de estas semana y media.",
+    "Lo único que tienes que hacer es sembrarlos en las macetas en el orden en que pasaron las cosas: primero lo más viejito, de último lo más reciente.",
+    "Cuando siembres uno, el sol le pega y la luz que proyecta te cuenta lo que guarda. Léelos con calma, que ahí están las pistas.",
+    "Y cuando queden los cinco en su orden, te llega tu regalo. Vamos."
   ],
 
-  /* ---- 4. El juego ----------------------------------------------------- */
+  /* ---- 3. Las frases del campo ----------------------------------------- */
   juego: {
     consigna:   "Siembra los girasoles del recuerdo más antiguo al más reciente",
-    semillero:  "Girasoles por sembrar — arrástralos a una maceta",
+    semillero:  "Girasoles por sembrar",
     comprobar:  "Ver si quedaron en orden",
-    ayudaInicio:"Toca un girasol y luego una maceta, o arrástralo hasta ella.",
+    ayudaInicio:"Toca un girasol de abajo y después la maceta donde va.",
     espera:     "Siembra un girasol y la luz del sol te contará el recuerdo que guarda.",
-    /* {aciertos} y {total} se reemplazan por los números */
+    lleno:      "Ya están los cinco sembrados. ¿Quedaron en orden?",
     casi:       "{aciertos} de {total} están en su lugar. Vuelve a leer los recuerdos y muévelos.",
     ninguno:    "Ninguno quedó en su sitio todavía. Fíjate bien en qué pasó primero.",
-    unoSolo:    "Solo uno está en su lugar. Sigue intentando, que no hay afán."
+    unoSolo:    "Solo uno está en su lugar. Sigue intentando, que no hay afán.",
+    reiniciar:  "Volver a empezar",
+    confirmar:  "¿Saco todos los girasoles y empezamos de cero?",
+    si:         "Sí, empezar de nuevo",
+    no:         "No, dejarlos así"
   },
 
-  /* ---- 5. LOS GIRASOLES ------------------------------------------------
-     `orden` es el orden cronológico real (1 = lo que pasó primero).
-     `titulo` es el encabezado del recuerdo.
-     `texto`  es el párrafo que sale en la proyección de luz.
-     `pista`  es la frase corta que se ve en el semillero antes de sembrarlo.
+  /* ---- 4. La guía, para que nadie se pierda ----------------------------- */
+  guia: {
+    boton:  "¿Cómo se juega?",
+    titulo: "Cómo se juega",
+    pasos: [
+      "Abajo están los cinco girasoles. Toca uno para levantarlo.",
+      "Después toca la maceta donde crees que va. También puedes arrastrarlo con el dedo.",
+      "Al sembrarlo, el sol lo alumbra y abajo aparece el recuerdo que guarda. Léelo.",
+      "Si te equivocaste, toca el girasol sembrado y llévalo a otra maceta. Puedes moverlos las veces que quieras.",
+      "Cuando estén los cinco, dale a «Ver si quedaron en orden»."
+    ],
+    cerrar: "Ya entendí"
+  },
 
-     La estética de cada girasol se arma con:
-       petalo:  "redondo" | "punta" | "onda" | "corazon" | "estrella" | "doble"
-       petalos: cuántos pétalos (8 a 16 se ven bien)
-       claro / hondo / centro: los tres colores de la flor
-       adorno:  "chispas" | "estrellas" | "notas" | "gotas" | "corazones" | "ninguno"
+  /* ---- 5. LOS GIRASOLES -------------------------------------------------
+     orden  = el orden cronológico real (1 = lo que pasó primero)
+     pista  = lo que se ve antes de sembrarlo, en el semillero
+     texto  = el párrafo que sale en la luz
+     petalo = redondo | punta | onda | corazon | estrella | doble
      ---------------------------------------------------------------------- */
   girasoles: [
     {
       orden: 1,
-      titulo: "El día que te vi por primera vez",
-      pista:  "Cuando todavía no sabía tu nombre",
-      texto:  "Todavía no sabía nada de ti y ya estaba pendiente de a qué horas volvías a pasar. Me acuerdo perfecto de lo que llevabas puesto y de que no me atreví a decirte nada. Este girasol es el más chiquito porque en ese momento apenas era una semilla.",
-      petalo: "redondo", petalos: 12,
+      titulo: "El almuerzo",
+      pista:  "El primer día",
+      texto:  "El primer día que nos vimos me llevaste almuerzo. Así, sin que yo pidiera nada, " +
+              "porque te diste cuenta de que entre mis cosas ni tiempo de cocinarme tenía.\n\n" +
+              "Te vas a reír, pero me quedé callado un buen rato. Aparte de mi mamá, nadie había " +
+              "hecho algo así por mí, y no estoy acostumbrado a que la gente me tenga en cuenta " +
+              "de esa forma.\n\n" +
+              "Para ti fue un almuerzo. Para mí fue bastante más que un almuerzo.",
+      petalo: "redondo", petalos: 12, altura: 1.55,
       claro: "#FFD98A", hondo: "#E9A93C", centro: "#5B3A1B",
       adorno: "chispas"
     },
     {
       orden: 2,
-      titulo: "La primera vez que hablamos de verdad",
-      pista:  "Esa conversación que se alargó",
-      texto:  "Se suponía que era un rato y terminamos hablando hasta que ya no había excusa para seguir ahí. Me fui pensando que quería que se repitiera. Se repitió.",
-      petalo: "punta", petalos: 14,
+      titulo: "La noche que me contaste tu vida",
+      pista:  "Cuando me tocó solo escuchar",
+      texto:  "Esa noche en tu casa me pusiste a escuchar. Me contaste lo que te ha tocado: la " +
+              "universidad, el arriendo, los dos negocios, todo saliendo de tus propias manos.\n\n" +
+              "Y yo ahí callado pensando: esta persona está haciendo lo imposible y ni se queja.\n\n" +
+              "Me vi reflejado, {nombre}. Esa terquedad de salir adelante, de responder por los " +
+              "tuyos, de no quedarte quieta. No sabes lo raro que es encontrarse a alguien que " +
+              "entienda eso sin que uno tenga que explicárselo.",
+      petalo: "punta", petalos: 14, altura: 1.72,
       claro: "#FFC55C", hondo: "#DE8B22", centro: "#4E3116",
       adorno: "estrellas"
     },
     {
       orden: 3,
-      titulo: "La canción",
-      pista:  "La que ya no puedo oír igual",
-      texto:  "Sonó de pura casualidad y desde ese día es tuya. La pongo y vuelvo a ese momento exacto, con todo y el ruido de fondo. Nunca te he dicho que la tengo guardada aparte.",
-      petalo: "onda", petalos: 13,
-      claro: "#FFE08A", hondo: "#D9902B", centro: "#5A3818",
-      adorno: "notas"
-    },
-    {
-      orden: 4,
-      titulo: "El aguacero",
-      pista:  "Cuando nos cogió la lluvia",
-      texto:  "Nos mojamos enteros y en vez de rabia nos dio risa. Ese día entendí que contigo hasta lo que sale mal se vuelve un buen recuerdo. Todavía me río solo cuando me acuerdo de tu cara.",
-      petalo: "doble", petalos: 16,
-      claro: "#FFCF6E", hondo: "#C87A1E", centro: "#46290F",
+      titulo: "En lo que no nos parecemos",
+      pista:  "Lo que nos ha costado",
+      texto:  "No somos iguales y no me voy a hacer el que no lo ve. A mí la vida me hizo " +
+              "independiente a las malas: me acostumbré a resolver solo y a no pedir nada.\n\n" +
+              "Y hay algo que casi nunca digo. Llevo años tratando de demostrar que valgo la pena, " +
+              "porque casi siempre me han puesto por debajo. Por eso vivo metido en mis proyectos " +
+              "como si se me fuera la vida en eso.\n\n" +
+              "Sé que nos ha quitado tiempo y sé que lo has sentido. No es que no quiera estar; es " +
+              "que ando peleando esa pelea. Y aun así, lo que hiciste por mí no se me ha olvidado " +
+              "ni un solo día.",
+      petalo: "onda", petalos: 13, altura: 1.62,
+      claro: "#F6C56A", hondo: "#C9791F", centro: "#4A2E13",
       adorno: "gotas"
     },
     {
+      orden: 4,
+      titulo: "Esta página",
+      pista:  "Lo que estoy haciendo ahora",
+      texto:  "Hoy es 25 de agosto y estoy terminando esto en vez de dormir.\n\n" +
+              "La idea salió de algo mínimo: me dijiste que te encantaban los girasoles. Se me " +
+              "quedó dando vueltas y pensé que era mejor sembrarte un campo entero que mandarte " +
+              "un mensaje de feliz cumpleaños y ya.\n\n" +
+              "Cada flor que has ido sembrando tiene un pedazo de estas semana y media. No es " +
+              "mucho tiempo, ya sé. Pero alcanzó para que me pasaran cosas que no me pasaban " +
+              "hace rato.\n\n" +
+              "Spoiler: el que sigue es el último.",
+      petalo: "doble", petalos: 16, altura: 1.80,
+      claro: "#FFCF6E", hondo: "#C87A1E", centro: "#46290F",
+      adorno: "notas"
+    },
+    {
       orden: 5,
-      titulo: "Hoy",
-      pista:  "El más grande, el de ahora",
-      texto:  "Y llegamos hasta acá, a tu cumpleaños, conmigo armándote un campo de girasoles en vez de dormir. Este es el más grande de todos porque es el que sigue creciendo. Feliz cumpleaños, {nombre}.",
-      petalo: "corazon", petalos: 12,
+      titulo: "Lo que te deseo",
+      pista:  "El último, el más grande",
+      texto:  "Feliz cumpleaños, {nombre}.\n\n" +
+              "Te deseo que la carrera te salga, que los dos negocios te crezcan, y que la gente " +
+              "a la que ayudas te devuelva aunque sea la mitad de lo que tú das. Porque tú vives " +
+              "tendiéndole la mano a todo el mundo y eso no lo hace cualquiera.\n\n" +
+              "Y sobre nosotros: si quieres espacio, lo entiendo, de pronto no soy lo que estás " +
+              "buscando. Y si quieres que sigamos hablando despacio, sin afán, sabiendo lo que soy " +
+              "y lo que puedo dar, aquí voy a estar.\n\n" +
+              "La ventana la dejo entreabierta, y siempre desde el respeto y la admiración.",
+      petalo: "corazon", petalos: 12, altura: 1.95,
       claro: "#FFC24D", hondo: "#D4661C", centro: "#4A2A12",
       adorno: "corazones"
     }
   ],
 
-  /* ---- 6. Cuando gana --------------------------------------------------- */
+  /* ---- 6. Cuando gana ---------------------------------------------------- */
   victoria: {
     etiqueta: "el campo quedó completo",
     titulo:   "¡Felicitaciones! Pudiste organizar los girasoles",
@@ -109,7 +148,7 @@ const CONFIG = {
     boton:    "Y ahora sí, tu regalo"
   },
 
-  /* ---- 7. El cierre y lo que necesitas que te mande ---------------------- */
+  /* ---- 7. El regalo ------------------------------------------------------ */
   final: {
     etiqueta: "una última cosa",
     titulo:   "Espero que te haya gustado esta pequeña dinámica",
@@ -120,8 +159,28 @@ const CONFIG = {
       "La dirección donde te llega todo bien",
       "Algo que te guste comer"
     ],
-    nota:   "Me lo mandas por donde siempre y yo me encargo del resto.",
+    nota:   "Me lo mandas por donde siempre hablamos y yo me encargo del resto.",
     boton:  "Copiar la lista",
-    copiado:"Listo, copiado. Solo pégalo y mándamelo."
+    copiado:"Listo, copiado. Solo pégalo y mándamelo.",
+    seguir: "Falta un girasol"
+  },
+
+  /* ---- 8. El girasol en blanco (opcional) --------------------------------
+     El botón abre WhatsApp con el texto ya escrito.
+     Cambia el número aquí si algún día lo necesitas (país + número, sin +). */
+  blanco: {
+    etiqueta:    "opcional, solo si te provoca",
+    titulo:      "Te dejo un girasol sin escribir",
+    texto:       "Este quedó en blanco a propósito. Si quieres llenarlo con algo, lo que sea, " +
+                 "escríbelo aquí. Lo voy a leer, te lo prometo.",
+    marcador:    "Escribe aquí lo que quieras…",
+    whatsapp:    "Mandármelo por WhatsApp",
+    numero:      "573160480641",
+    copiar:      "O copiar el texto",
+    copiado:     "Copiado. Pégamelo por donde quieras.",
+    vacio:       "Escribe algo primero y el botón se activa.",
+    ayuda:       "Al tocar el botón se te abre WhatsApp con el mensaje ya escrito. Solo le das enviar.",
+    saltar:      "Dejarlo en blanco",
+    despedida:   "Gracias por jugar, {nombre}. Feliz cumpleaños."
   }
 };

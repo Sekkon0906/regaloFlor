@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>El campo de girasoles</title>
-<meta name="description" content="Una dinámica de cumpleaños: ordenar los girasoles según los recuerdos que guardan.">
+<meta name="description" content="Una dinámica de cumpleaños: sembrar los girasoles en el orden en que pasaron los recuerdos.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Karla:wght@400;500;700&display=swap">
@@ -12,7 +12,18 @@
 </head>
 <body>
 
+<canvas id="lienzo3d" aria-hidden="true"></canvas>
 <canvas id="lienzo-fiesta" aria-hidden="true"></canvas>
+
+<!-- si el navegador no puede con 3D -->
+<div class="sin3d" id="sin3d" hidden>
+  <div class="hoja-texto">
+    <p class="etiqueta">uy, casi</p>
+    <h1 class="titular titular--medio">Este navegador no puede mostrar el campo</h1>
+    <p class="texto-guion">La página necesita 3D y este navegador lo tiene apagado. Ábrela en
+      Chrome o Safari actualizado y te aparece el campo completo.</p>
+  </div>
+</div>
 
 <main id="app">
 
@@ -26,7 +37,7 @@
     <button class="pista" id="bv-continuar" type="button"></button>
   </section>
 
-  <!-- ─────────────  2. INTRODUCCIÓN  ───────────── -->
+  <!-- ─────────────  2. GUION  ───────────── -->
   <section class="escena" id="escena-intro" data-escena="intro" tabindex="-1">
     <div class="hoja-texto">
       <p class="texto-guion" id="intro-texto"></p>
@@ -37,45 +48,45 @@
     </div>
   </section>
 
-  <!-- ─────────────  3. EL CAMPO (juego)  ───────────── -->
+  <!-- ─────────────  3. EL CAMPO  ───────────── -->
   <section class="escena escena--campo" id="escena-juego" data-escena="juego" tabindex="-1">
 
-    <div class="cielo">
-      <div class="sol" id="sol"><span class="sol__nucleo"></span></div>
-      <div class="nube nube--a"></div>
-      <div class="nube nube--b"></div>
-      <div class="nube nube--c"></div>
-      <div class="abeja" id="abeja" aria-hidden="true"></div>
-      <div class="mariposa" id="mariposa" aria-hidden="true"></div>
+    <div class="cabecera">
       <p class="consigna" id="consigna"></p>
+      <div class="cabecera__botones">
+        <button class="boton-liviano" id="btn-guia" type="button"></button>
+        <button class="boton-liviano" id="btn-reiniciar" type="button"></button>
+      </div>
     </div>
 
-    <svg class="haz" id="haz" aria-hidden="true" preserveAspectRatio="none"></svg>
+    <!-- rótulos que van pegados a las flores y a las macetas -->
+    <div class="rotulos" id="rotulos" aria-hidden="true"></div>
 
-    <div class="tierra">
-      <div class="macetas" id="macetas"></div>
-    </div>
+    <!-- en pantallas angostas las pistas se leen aquí, no flotando sobre las flores -->
+    <div class="tira" id="tira" aria-label="Girasoles por sembrar"></div>
 
     <div class="proyeccion proyeccion--dormida" id="proyeccion">
       <p class="proyeccion__espera" id="proy-espera"></p>
       <article class="proyeccion__hoja">
+        <button class="proyeccion__cerrar" id="proy-cerrar" type="button">
+          Seguir sembrando<span aria-hidden="true"> ↓</span>
+        </button>
         <p class="proyeccion__orden" id="proy-marca"></p>
         <h2 class="proyeccion__titulo" id="proy-titulo"></h2>
-        <p class="proyeccion__texto" id="proy-texto"></p>
+        <div class="proyeccion__texto" id="proy-texto"></div>
       </article>
     </div>
 
     <div class="banca">
-      <div class="semillero">
-        <p class="etiqueta etiqueta--tierra" id="semillero-titulo"></p>
-        <div class="semillero__fila" id="semillero"></div>
-      </div>
-      <div class="controles">
-        <p class="aviso" id="aviso" role="status" aria-live="polite"></p>
-        <button class="boton" id="btn-comprobar" type="button" disabled></button>
-      </div>
+      <p class="aviso" id="aviso" role="status" aria-live="polite"></p>
+      <button class="boton" id="btn-comprobar" type="button" disabled></button>
     </div>
 
+    <!-- lista invisible para quien navega con teclado o lector de pantalla -->
+    <div class="solo-teclado" id="solo-teclado">
+      <h2>Los girasoles y las macetas</h2>
+      <div id="lista-teclado"></div>
+    </div>
   </section>
 
   <!-- ─────────────  4. VICTORIA  ───────────── -->
@@ -92,7 +103,7 @@
     </div>
   </section>
 
-  <!-- ─────────────  5. CIERRE  ───────────── -->
+  <!-- ─────────────  5. EL REGALO  ───────────── -->
   <section class="escena" id="escena-final" data-escena="final" tabindex="-1">
     <div class="hoja-texto hoja-texto--ancha">
       <p class="etiqueta" id="fin-etiqueta"></p>
@@ -102,16 +113,64 @@
       <p class="nota" id="fin-nota"></p>
       <div class="hoja-texto__pie">
         <span class="cuenta" id="fin-copiado" role="status" aria-live="polite"></span>
-        <button class="boton boton--suave" id="btn-copiar" type="button"></button>
+        <div class="pie-botones">
+          <button class="boton boton--suave" id="btn-copiar" type="button"></button>
+          <button class="boton" id="btn-seguir" type="button"></button>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ─────────────  6. EL GIRASOL EN BLANCO  ───────────── -->
+  <section class="escena" id="escena-blanco" data-escena="blanco" tabindex="-1">
+    <div class="hoja-texto hoja-texto--ancha">
+      <p class="etiqueta" id="bl-etiqueta"></p>
+      <h2 class="titular titular--medio" id="bl-titulo"></h2>
+      <p class="texto-guion" id="bl-texto"></p>
+      <label class="campo-texto">
+        <span class="solo-lectores">Lo que quieras escribir</span>
+        <textarea id="bl-area" rows="6"></textarea>
+      </label>
+      <p class="nota" id="bl-ayuda"></p>
+      <div class="hoja-texto__pie hoja-texto__pie--columna">
+        <span class="cuenta" id="bl-estado" role="status" aria-live="polite"></span>
+        <div class="pie-botones">
+          <button class="boton boton--suave" id="bl-copiar" type="button"></button>
+          <button class="boton boton--wa" id="bl-whatsapp" type="button" disabled></button>
+        </div>
+      </div>
+      <button class="pista" id="bl-saltar" type="button"></button>
     </div>
   </section>
 
 </main>
 
+<!-- ─────────────  LA GUÍA  ───────────── -->
+<div class="guia" id="guia" hidden>
+  <div class="guia__hoja" role="dialog" aria-modal="true" aria-labelledby="guia-titulo">
+    <h2 class="titular titular--medio" id="guia-titulo"></h2>
+    <ol class="guia__pasos" id="guia-pasos"></ol>
+    <button class="boton" id="guia-cerrar" type="button"></button>
+  </div>
+</div>
+
+<!-- ─────────────  CONFIRMAR REINICIO  ───────────── -->
+<div class="guia" id="confirmar" hidden>
+  <div class="guia__hoja guia__hoja--angosta" role="dialog" aria-modal="true" aria-labelledby="conf-texto">
+    <p class="texto-guion" id="conf-texto"></p>
+    <div class="pie-botones">
+      <button class="boton boton--suave" id="conf-no" type="button"></button>
+      <button class="boton" id="conf-si" type="button"></button>
+    </div>
+  </div>
+</div>
+
+<script src="js/vendor/three.min.js"></script>
 <script src="js/config.js"></script>
-<script src="js/escena.js"></script>
+<script src="js/girasol3d.js"></script>
+<script src="js/campo3d.js"></script>
 <script src="js/celebracion.js"></script>
+<script src="js/guia.js"></script>
 <script src="js/juego.js"></script>
 </body>
 </html>
