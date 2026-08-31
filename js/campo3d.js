@@ -21,14 +21,14 @@ const Campo = (() => {
     lejos:    { pos: [0, 3.4, 17.5], mira: [0, 5.2, 0],    fov: 46 },
     guion:    { pos: [0, 3.3, 13.0], mira: [0, 3.4, 0],    fov: 46 },
     juego:    { pos: [0, 4.6, 9.1],  mira: [0, 0.8, 1.6],  fov: 50 },
-    leyendo:  { pos: [0, 3.4, 6.6],  mira: [0, 1.7, -0.7], fov: 46 },
+    leyendo:  { pos: [0, 2.9, 4.9],  mira: [0, 1.45, 0],   fov: 44 },
     victoria: { pos: [0, 4.3, 8.6],  mira: [0, 1.7, 0],    fov: 50 }
   };
   const CAMARAS_ALTO = {
     lejos:    { pos: [0, 3.6, 19.0], mira: [0, 6.4, 0],    fov: 58 },
     guion:    { pos: [0, 3.6, 15.0], mira: [0, 4.6, 0],    fov: 58 },
     juego:    { pos: [0, 6.0, 16.2], mira: [0, 0.6, 2.0],  fov: 56 },
-    leyendo:  { pos: [0, 4.6, 10.6], mira: [0, 2.1, -0.8], fov: 54 },
+    leyendo:  { pos: [0, 3.2, 6.4],  mira: [0, 1.5, 0],    fov: 52 },
     victoria: { pos: [0, 5.4, 14.0], mira: [0, 1.5, 0],    fov: 56 }
   };
   let CAMARAS = CAMARAS_LADO;
@@ -400,7 +400,7 @@ const Campo = (() => {
     escena.add(cupula);
 
     // luces
-    escena.add(new THREE.HemisphereLight(0xA8C8E8, 0x5E7C3E, 0.46));
+    escena.add(new THREE.HemisphereLight(0xA8C8E8, 0x5E7C3E, 0.36));
     luzSol = new THREE.DirectionalLight(0xFFEBB4, 1.55);
     luzSol.position.copy(SOL);
     luzSol.castShadow = true;
@@ -414,7 +414,7 @@ const Campo = (() => {
     escena.add(luzSol);
     escena.add(luzSol.target);
 
-    const relleno = new THREE.DirectionalLight(0xFFEFCC, 0.58);
+    const relleno = new THREE.DirectionalLight(0xFFEFCC, 0.40);
     relleno.position.set(-5, 6.5, 12);
     escena.add(relleno);
     luzSol.target.position.set(0, 0.8, 1);
@@ -616,9 +616,10 @@ const Campo = (() => {
     v2.set((x / lienzo.clientWidth) * 2 - 1, -(y / lienzo.clientHeight) * 2 + 1);
     rayo.setFromCamera(v2, camara);
 
-    const golpesFlor = rayo.intersectObjects(flores.map((f) => f.colision), false);
+    const candidatas = flores.filter((f) => !f.arrastrando);
+    const golpesFlor = rayo.intersectObjects(candidatas.map((f) => f.colision), false);
     if (golpesFlor.length) {
-      const f = flores.find((x) => x.colision === golpesFlor[0].object);
+      const f = candidatas.find((x) => x.colision === golpesFlor[0].object);
       return { tipo: "girasol", id: f.indiceFlor, sembradaEn: f.sembradaEn };
     }
     const golpesMaceta = rayo.intersectObjects(macetas.map((m) => m.colision), false);
@@ -629,7 +630,7 @@ const Campo = (() => {
     return { tipo: "campo" };
   }
 
-  const planoArrastre = new THREE.Plane(new THREE.Vector3(0, 1, 0), -1.1);
+  const planoArrastre = new THREE.Plane(new THREE.Vector3(0, 1, 0), -ALTO_MACETA * 0.88);
   function puntoEnCampo(x, y) {
     v2.set((x / lienzo.clientWidth) * 2 - 1, -(y / lienzo.clientHeight) * 2 + 1);
     rayo.setFromCamera(v2, camara);
@@ -640,7 +641,22 @@ const Campo = (() => {
   function tomarFlor(id) { flores[id].arrastrando = true; }
   function moverFlor(id, punto) {
     if (!punto) return;
-    flores[id].position.set(punto.x, 1.05, THREE.MathUtils.clamp(punto.z, -1.2, Z_SEMILLERO + 1));
+    flores[id].position.set(
+      THREE.MathUtils.clamp(punto.x, -8, 8),
+      ALTO_MACETA * 0.88,
+      THREE.MathUtils.clamp(punto.z, -1.4, Z_SEMILLERO + 1.2));
+  }
+
+  /* La maceta más cercana a donde quedó la flor. Da un margen generoso para
+     que soltar cerca cuente como acertar, en vez de exigir puntería. */
+  function macetaCercana(id, margen) {
+    const p = flores[id].position;
+    let mejor = -1, dist = margen === undefined ? PASO_MACETA * 0.85 : margen;
+    macetas.forEach((m, i) => {
+      const d = Math.hypot(p.x - m.position.x, p.z - m.position.z);
+      if (d < dist) { dist = d; mejor = i; }
+    });
+    return mejor;
   }
   function soltarFlor(id) { flores[id].arrastrando = false; }
 
@@ -753,10 +769,14 @@ const Campo = (() => {
       // heliotropismo: mira al sol, pero sin darle la espalda a quien juega
       const cabezaPos = vAux.set(0, alturaDe(f), 0).add(f.position);
       const haciaSol = SOL.clone().sub(cabezaPos).normalize();
+      haciaSol.y = Math.min(haciaSol.y, 0.30);
+      haciaSol.normalize();
       const haciaOjo = camara.position.clone().sub(cabezaPos).normalize();
+      haciaOjo.y = Math.min(haciaOjo.y, 0.30);
+      haciaOjo.normalize();
       const mezcla = f.sembradaEn >= 0
-        ? haciaSol.multiplyScalar(0.45).add(haciaOjo.multiplyScalar(0.55))
-        : haciaOjo.multiplyScalar(0.85).add(haciaSol.multiplyScalar(0.15));
+        ? haciaSol.multiplyScalar(0.38).add(haciaOjo.multiplyScalar(0.62))
+        : haciaOjo.multiplyScalar(0.88).add(haciaSol.multiplyScalar(0.12));
       objAux.position.copy(cabezaPos);
       objAux.lookAt(cabezaPos.clone().add(mezcla.normalize()));
       qAux.copy(objAux.quaternion);
@@ -808,7 +828,7 @@ const Campo = (() => {
   return {
     hayWebGL, iniciar, poblar, colocarFlor, sitioSemillero, sitioMaceta,
     activar, refrescarHaz, puntoDeFlor, puntoDeCharco, puntoEnPantalla,
-    aQueApunta, puntoEnCampo, tomarFlor, moverFlor, soltarFlor, resaltarMaceta,
+    aQueApunta, puntoEnCampo, tomarFlor, moverFlor, soltarFlor, resaltarMaceta, macetaCercana,
     irCamara, xDeMaceta, mostrarGlobos,
     alRedimensionar: (fn) => { alRedimensionar = fn; }, mostrarLluvia, marcarAros, alCadaCuadro,
     get flores() { return flores; }, CALMA

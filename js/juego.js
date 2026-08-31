@@ -306,7 +306,7 @@
     e.preventDefault();
     Campo.moverFlor(gesto.id, Campo.puntoEnCampo(e.clientX, e.clientY));
     const q = Campo.aQueApunta(e.clientX, e.clientY);
-    Campo.resaltarMaceta(q.tipo === "maceta" ? q.pos : -1);
+    Campo.resaltarMaceta(q.tipo === "maceta" ? q.pos : Campo.macetaCercana(gesto.id));
   }
 
   function alSoltar(e) {
@@ -317,7 +317,8 @@
     if (g.id !== undefined && g.movido) {
       Campo.soltarFlor(g.id);
       const q = Campo.aQueApunta(e.clientX, e.clientY);
-      if (q.tipo === "maceta") sembrar(g.id, q.pos);
+      const destino = q.tipo === "maceta" ? q.pos : Campo.macetaCercana(g.id);
+      if (destino >= 0) sembrar(g.id, destino);
       else if (macetas.indexOf(g.id) >= 0) devolver(g.id);
       else refrescarTodo();
       return;

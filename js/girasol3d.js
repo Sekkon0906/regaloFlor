@@ -211,26 +211,26 @@ const Girasol3D = (() => {
 
     // pétalos: una corona de fondo en el tono hondo y otra encima en el claro
     const forma = formaPetalo(tema.petalo);
-    const geoPetalo = curvar(new THREE.ShapeGeometry(forma, 16), 0.26, 0.42);
+    const geoPetalo = curvar(new THREE.ShapeGeometry(forma, 16), 0.13, 0.20);
     const cuantos = tema.petalos || 12;
 
     const coronas = tema.petalo === "doble"
-      ? [{ color: tema.hondo, esc: 1.00, giro: 0.5, incl: -0.30, z: 0.00 },
-         { color: tema.claro, esc: 0.70, giro: 0.0, incl: -0.16, z: 0.03 }]
-      : [{ color: tema.hondo, esc: 1.00, giro: 0.5, incl: -0.28, z: 0.00 },
-         { color: tema.claro, esc: 0.84, giro: 0.0, incl: -0.15, z: 0.03 }];
+      ? [{ color: tema.hondo, esc: 1.00, giro: 0.5, incl: -0.11, z: -0.030 },
+         { color: tema.claro, esc: 0.72, giro: 0.0, incl: -0.05, z: 0.055 }]
+      : [{ color: tema.hondo, esc: 1.00, giro: 0.5, incl: -0.10, z: -0.028 },
+         { color: tema.claro, esc: 0.86, giro: 0.0, incl: -0.04, z: 0.050 }];
 
     coronas.forEach((c) => {
       const mat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(c.color), roughness: 0.62, metalness: 0.02,
-        side: THREE.DoubleSide, emissive: new THREE.Color(c.color).multiplyScalar(0.045)
+        side: THREE.DoubleSide, emissive: new THREE.Color(c.color).multiplyScalar(0.02)
       });
       for (let i = 0; i < cuantos; i++) {
         const pivote = new THREE.Group();
         pivote.rotation.z = (i / cuantos) * Math.PI * 2 + (c.giro * Math.PI) / cuantos;
         const petalo = new THREE.Mesh(geoPetalo, mat);
         petalo.scale.setScalar(RADIO * 2.05 * c.esc);
-        petalo.position.y = RADIO * 0.34;
+        petalo.position.y = RADIO * 0.46;
         petalo.position.z = c.z;
         petalo.rotation.x = c.incl;
         petalo.castShadow = true;
@@ -240,11 +240,11 @@ const Girasol3D = (() => {
     });
 
     // el domo de semillas, con UV planas para que la espiral caiga derecha
-    const domo = new THREE.SphereGeometry(RADIO * 0.62, 34, 16, 0, Math.PI * 2, 0, Math.PI * 0.34);
+    const domo = new THREE.SphereGeometry(RADIO * 0.74, 34, 16, 0, Math.PI * 2, 0, Math.PI * 0.34);
     domo.rotateX(Math.PI / 2);
-    domo.scale(1, 1, 0.55);
+    domo.scale(1, 1, 0.24);
     const pos = domo.attributes.position, uv = domo.attributes.uv;
-    const r2 = RADIO * 0.62 * 2;
+    const r2 = RADIO * 0.74 * 2;
     for (let i = 0; i < pos.count; i++) {
       uv.setXY(i, pos.getX(i) / r2 + 0.5, pos.getY(i) / r2 + 0.5);
     }
@@ -252,13 +252,13 @@ const Girasol3D = (() => {
     const centro = new THREE.Mesh(domo, new THREE.MeshStandardMaterial({
       map: texturaCentro(tema), roughness: 0.88, side: THREE.DoubleSide
     }));
-    centro.position.z = 0.012;
+    centro.position.z = 0.004;
     centro.castShadow = true;
     cabeza.add(centro);
 
     // el filo del disco
     const filo = new THREE.Mesh(
-      new THREE.TorusGeometry(RADIO * 0.62, 0.018, 8, 40),
+      new THREE.TorusGeometry(RADIO * 0.74, 0.016, 8, 40),
       new THREE.MeshStandardMaterial({ color: bordeColor, roughness: 0.8 })
     );
     cabeza.add(filo);

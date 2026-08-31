@@ -306,12 +306,17 @@ button { font: inherit; color: inherit; cursor: pointer; border: 0; background: 
 
 .proyeccion__hoja {
   position: relative; z-index: 1;
-  max-width: 58ch; max-height: 42vh;
+  max-width: 58ch;
   margin: 0 auto;
+  padding: calc(var(--boca) + 0.4rem) 0.2rem clamp(0.7rem, 2vh, 1.1rem);
+  /* solo por si el texto fuera larguísimo en una pantalla muy baja;
+     y aun así, sin barra a la vista */
+  max-height: 78vh;
   overflow-y: auto;
-  padding: calc(var(--boca) + 0.5rem) 0.2rem clamp(0.8rem, 2.2vh, 1.2rem);
+  scrollbar-width: none;
   text-align: center;
 }
+.proyeccion__hoja::-webkit-scrollbar { display: none; }
 .proyeccion--dormida .proyeccion__hoja { display: none; }
 .proyeccion:not(.proyeccion--dormida) .proyeccion__espera { display: none; }
 
@@ -569,12 +574,12 @@ button { font: inherit; color: inherit; cursor: pointer; border: 0; background: 
 /* ---- pantallas anchas ----------------------------------------------------- */
 @media (min-width: 900px) {
   .aviso { max-width: 44ch; }
-  .proyeccion__hoja { max-height: 38vh; }
 }
 
 /* ---- pantallas bajitas ---------------------------------------------------- */
 @media (max-height: 640px) {
-  .proyeccion__hoja { max-height: 46vh; }
+  .proyeccion__texto p { font-size: 0.86rem; line-height: 1.46; }
+  .proyeccion__hoja { padding-top: calc(var(--boca) + 0.2rem); }
 }
 
 /* En pantallas angostas cinco rótulos flotantes se pisan entre sí, así que
