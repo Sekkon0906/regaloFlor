@@ -94,8 +94,26 @@ Deja todo junto en `dist/regalo.html`, con Three.js incluido dentro.
 
 ## Publicarla en internet
 
-Con GitHub Pages: en el repositorio, **Settings → Pages**, elige la rama y la
-carpeta raíz. La página queda en `https://<usuario>.github.io/<repositorio>/`.
+### Con Vercel
+
+El proyecto está conectado a Vercel y su **rama de producción es `main`**. Solo
+lo que llega a `main` se publica en el dominio de verdad: lo que se suba a
+cualquier otra rama se queda en un despliegue de *Preview* y no se ve en la
+dirección pública, aunque en GitHub el código esté correcto.
+
+Así que después de tocar algo:
+
+```bash
+git push origin main
+```
+
+Si alguna vez la producción se queda atrás, en vercel.com dentro del proyecto:
+**Deployments** → el más reciente → menú **⋯** → **Promote to Production**.
+
+### Con GitHub Pages
+
+En el repositorio, **Settings → Pages**, elige la rama y la carpeta raíz. La
+página queda en `https://<usuario>.github.io/<repositorio>/`.
 
 ## Los archivos
 
